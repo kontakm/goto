@@ -426,7 +426,7 @@ _complete_goto_zsh()
   _goto_resolve_db
   while IFS= read -r line; do
     all_aliases+=("$line")
-  done <<< "$(sed -e 's/ /:/g' $GOTO_DB 2>/dev/null)"
+  done <<< "$(sed -e 's/ /:/g' "$GOTO_DB" 2>/dev/null)"
 
   local state
   local -a options=(
@@ -458,7 +458,8 @@ _complete_goto_zsh()
   return $ret
 }
 
-goto_aliases=($(alias | sed -n "s/.*\s\(.*\)='goto'/\1/p"))
+#goto_aliases=($(alias | sed -n "s/.*\s\(.*\)='goto'/\1/p"))
+mapfile -t goto_aliases < <(alias | sed -n "s/.*\s\(.*\)='goto'/\1/p")
 goto_aliases+=("goto")
 
 for i in "${goto_aliases[@]}"
@@ -466,12 +467,12 @@ for i in "${goto_aliases[@]}"
 		# Register the goto completions.
 	if [ -n "${BASH_VERSION}" ]; then
 	  if ! [[ $(uname -s) =~ Darwin* ]]; then
-	    complete -o filenames -F _complete_goto_bash $i
+	    complete -o filenames -F _complete_goto_bash "$i"
 	  else
-	    complete -F _complete_goto_bash $i
+	    complete -F _complete_goto_bash "$i"
 	  fi
 	elif [ -n "${ZSH_VERSION}" ]; then
-	  compdef _complete_goto_zsh $i
+	  compdef _complete_goto_zsh "$i"
 	else
 	  echo "Unsupported shell."
 	  exit 1
