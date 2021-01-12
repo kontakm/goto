@@ -459,8 +459,8 @@ _complete_goto_zsh()
 }
 
 #goto_aliases=($(alias | sed -n "s/.*\s\(.*\)='goto'/\1/p"))
-mapfile -t goto_aliases < <(alias | sed -n "s/.*\s\(.*\)='goto'/\1/p")
-goto_aliases+=("goto")
+#mapfile -t goto_aliases < <(alias | sed -n "s/.*\s\(.*\)='goto'/\1/p")
+goto_aliases=("goto")
 
 for i in "${goto_aliases[@]}"
 	do
